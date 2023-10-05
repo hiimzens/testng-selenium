@@ -18,7 +18,7 @@ public class CreateDriver {
 
     }
     public void setBrowser(String browser){
-        switch (browser.toLowerCase()){
+        switch (browser.toLowerCase()) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 driver = new ChromeDriver();
