@@ -1,7 +1,6 @@
 package pages;
 
 import driverManager.CreateDriver;
-import driverManager.CreateDriverWait;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -10,18 +9,30 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 
 public class BasePage {
+    /******************************** Attributes**************************************************/
+    private WebDriver driver = CreateDriver.getInstance().getDriver();
+    private final int TIMEOUT_IN_SECONDS = Integer.parseInt(System.getProperty("TIMEOUT_IN_SECOND"));
+    private final int LONG_TIMEOUT_IN_SECONDS = Integer.parseInt(System.getProperty("LONG_TIMEOUT_IN_SECOND"));
+    public BasePage(WebDriver driver){
+       this.driver = driver;
+    }
+    public WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT_IN_SECONDS));
+    public WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_IN_SECONDS));
+    /*********************************** Common methods ******************************************/
+    public void navigateToURL(String subDirectoryURL){
+        driver.get(System.getProperty("BASE_URL")+subDirectoryURL);
+    }
+    public void maximizeBrowserWindow(){
+        driver.manage().window().maximize();
+    }
 
-    public WebDriver driver = CreateDriver.getInstance().getDriver();
-    public WebDriverWait longWait = CreateDriverWait.getInstance().getLongWait(driver);
-    public WebDriverWait shortWait = CreateDriverWait.getInstance().getShortWait(driver);
-
-    /*********************************** Wait methods ************************8******************/
+    /*********************************** Wait methods ******************************************/
 
     public WebElement waitForElementToBeVisible(boolean isLongWait, By locator) {
         if (isLongWait) {
@@ -56,6 +67,10 @@ public class BasePage {
     public String getText(boolean isLongWait, By locator){
         WebElement element = waitForElementToBeVisible(isLongWait, locator);
         return element.getText();
+    }
+    public void inputText(boolean isLongWait, By locator, String text){
+        WebElement element = waitForElementToBeClickable(isLongWait, locator);
+        element.sendKeys(text);
     }
     public List<String> getListText(boolean isLongWait, By locator,int expectedNumberOfElement){
         List<String> listText = new ArrayList<String>();
