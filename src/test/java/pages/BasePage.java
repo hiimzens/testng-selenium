@@ -8,33 +8,35 @@ import org.openqa.selenium.WebElement;
 
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.extentReports.ExtentTestManager;
+import utils.log.Log;
 
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static utils.extentReports.ExtentTestManager.getTest;
+
 
 public class BasePage {
     /******************************** Attributes**************************************************/
-    private WebDriver driver = CreateDriver.getInstance().getDriver();
     private final int TIMEOUT_IN_SECONDS = Integer.parseInt(System.getProperty("TIMEOUT_IN_SECOND"));
     private final int LONG_TIMEOUT_IN_SECONDS = Integer.parseInt(System.getProperty("LONG_TIMEOUT_IN_SECOND"));
-    public BasePage(WebDriver driver){
-       this.driver = driver;
-    }
-    public WebDriverWait longWait = new WebDriverWait(driver, Duration.ofSeconds(LONG_TIMEOUT_IN_SECONDS));
-    public WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(TIMEOUT_IN_SECONDS));
+
+    public WebDriverWait longWait = new WebDriverWait(CreateDriver.getInstance().getDriver(), Duration.ofSeconds(LONG_TIMEOUT_IN_SECONDS));
+    public WebDriverWait shortWait = new WebDriverWait(CreateDriver.getInstance().getDriver(), Duration.ofSeconds(TIMEOUT_IN_SECONDS));
     /*********************************** Common methods ******************************************/
     public void navigateToURL(String subDirectoryURL){
-        driver.get(System.getProperty("BASE_URL")+subDirectoryURL);
+        CreateDriver.getInstance().getDriver().get(System.getProperty("BASE_URL")+subDirectoryURL);
     }
     public void maximizeBrowserWindow(){
-        driver.manage().window().maximize();
+        CreateDriver.getInstance().getDriver().manage().window().maximize();
     }
 
     /*********************************** Wait methods ******************************************/
 
     public WebElement waitForElementToBeVisible(boolean isLongWait, By locator) {
+        Log.info("Wait for element to be visible");
         if (isLongWait) {
             return longWait.until(ExpectedConditions.visibilityOfElementLocated(locator));
         }
@@ -42,13 +44,14 @@ public class BasePage {
     }
 
     public WebElement waitForElementToBeClickable(boolean isLongWait, By locator){
+        Log.info("Wait for element to be clickable");
         if(isLongWait){
             return longWait.until(ExpectedConditions.elementToBeClickable(locator));
         }
         return shortWait.until(ExpectedConditions.elementToBeClickable(locator));
     }
     public List<WebElement> waitForPresenceOfAllElementLocatedBy(boolean isLongWait, By locator){
-
+        Log.info("Wait for all element with the same locator to be visible");
         if(isLongWait){
             return longWait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
         }
@@ -56,6 +59,7 @@ public class BasePage {
 
     }
     public Alert waitForAlertToBeVisible (boolean isLongWait){
+        Log.info("Wait for alert to be visible");
         if(isLongWait){
             return longWait.until(ExpectedConditions.alertIsPresent());
         }
@@ -66,10 +70,12 @@ public class BasePage {
     /******************************** Interact with element methods *********************************/
     public String getText(boolean isLongWait, By locator){
         WebElement element = waitForElementToBeVisible(isLongWait, locator);
+        Log.info("Get text of element");
         return element.getText();
     }
     public void inputText(boolean isLongWait, By locator, String text){
         WebElement element = waitForElementToBeClickable(isLongWait, locator);
+        Log.info("Input text into element");
         element.sendKeys(text);
     }
     public List<String> getListText(boolean isLongWait, By locator,int expectedNumberOfElement){
@@ -85,18 +91,22 @@ public class BasePage {
         for (WebElement element:listWebElement) {
             listText.add(element.getText());
         }
+        Log.info("Get list text");
         return listText;
     }
     public void clickElement(boolean isLongWait, By locator){
+        Log.info("Click element");
         WebElement element = waitForElementToBeClickable(isLongWait, locator);
         element.click();
     }
 
     public String getTextOfAlert(boolean isLongWait){
+        Log.info("Get text of alert");
         Alert alert = waitForAlertToBeVisible(isLongWait);
         return alert.getText();
     }
     public void clickOKButtonOfAlert(boolean isLongWait) {
+        Log.info("Click OK button of alert");
         Alert alert = waitForAlertToBeVisible(isLongWait);
         alert.accept();
     }

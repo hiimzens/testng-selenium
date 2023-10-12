@@ -6,7 +6,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class CreateDriver {
-    private WebDriver driver;
+    private ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     public static CreateDriver INSTANCE;
     public static CreateDriver getInstance(){
         if(INSTANCE == null){
@@ -21,17 +21,17 @@ public class CreateDriver {
         switch (browser.toLowerCase()) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver();
+                driver.set(new ChromeDriver());
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
-                driver = new FirefoxDriver();
+                driver.set(new FirefoxDriver());
                 break;
             default:
                 throw new IllegalArgumentException("Invalid browser type");
         }
     }
     public WebDriver getDriver(){
-        return driver;
+        return driver.get();
     }
 }
