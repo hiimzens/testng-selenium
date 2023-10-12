@@ -6,16 +6,13 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 public class CreateDriver {
-    private ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static  ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     public static CreateDriver INSTANCE;
     public static CreateDriver getInstance(){
         if(INSTANCE == null){
             INSTANCE = new CreateDriver();
         }
         return INSTANCE;
-    }
-    private CreateDriver(){
-
     }
     public void setBrowser(String browser){
         switch (browser.toLowerCase()) {

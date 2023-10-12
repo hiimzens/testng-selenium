@@ -8,6 +8,7 @@ import static utils.extentReports.ExtentTestManager.getTest;
 public class HomePage extends BasePage {
     private final By LBL_PRODUCT = By.className("product_label");
     public static HomePage INSTANCE;
+
     public static HomePage getInstance(){
         if(INSTANCE==null){
             INSTANCE = new HomePage();

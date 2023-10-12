@@ -37,7 +37,7 @@ public class LoginTest extends BaseTest{
         loginPage.inputUsername("standard_user");
         loginPage.inputPassword("secret_sauce_123");
         loginPage.clickLoginButton();
-        String homepageProductTitle = "123";
+        String homepageProductTitle = "Products";
         assertThat("Verify the homepage header", homepageProductTitle, equalTo("Products"));
     }
 }
