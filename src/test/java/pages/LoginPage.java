@@ -11,13 +11,12 @@ public class LoginPage extends BasePage {
     private final By TXT_PASSWORD = By.id("password");
     private final By BTN_LOGIN = By.id("login-button");
     public static LoginPage INSTANCE;
+
     public static LoginPage getInstance(){
         if(INSTANCE==null){
             INSTANCE = new LoginPage();
         }
         return INSTANCE;
-    }
-    public LoginPage(){
     }
     public void inputUsername(String userName){
         getTest().info("Input username: " + userName);
@@ -33,3 +32,4 @@ public class LoginPage extends BasePage {
         clickElement(false,BTN_LOGIN);
     }
 }
+//I think the driver.quit called after the beforeMethod
